@@ -76,7 +76,7 @@ class Couplets_data_generator:
     def _create_dataset(self):
         m = len(self._total_couplets)
         max_len = min(len(max(self._total_couplets, key=len)), self._max_len)
-        total_dataset = np.zeros((m, max_len))
+        total_dataset = np.zeros((m, max_len), dtype=np.int32)
 
         for line in range(m):
             for pos, word in enumerate(self._total_couplets[line]):
