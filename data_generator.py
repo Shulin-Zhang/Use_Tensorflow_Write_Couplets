@@ -26,7 +26,7 @@ class Couplets_data_generator:
         return self._word2Index, self._index2word
 
 
-    def load_datasets(self, dev_test_size=4000, shuffle=False):
+    def load_datasets(self, dev_test_size=4000, shuffle=True):
         assert dev_test_size * 2 < len(self._total_dataset)
 
         if shuffle:
