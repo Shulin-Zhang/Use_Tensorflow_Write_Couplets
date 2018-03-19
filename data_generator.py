@@ -2,6 +2,8 @@
 # 2018-3-17
 # e-mail: zhangslwork@yeah.net
 
+# ！！这个数据集生成器一次处理所有数据，会发生内存占用超出机器内存的问题，所以不适合处理大数据集
+
 
 import numpy as np 
 from collections import Counter
@@ -61,14 +63,17 @@ class Couplets_data_generator:
         return total_dataset
 
 
-    def load_datasets(self, dev_test_size=4000):
-        assert dev_test_size * 2 < len(self._total_couplets)
+    def load_datasets(self, dev_test_size=4000, shuffle=False):
+        assert dev_test_size * 2 < len(self._total_dataset)
 
-        total_shuffle = self._shuffle_dataset()
+        if shuffle:
+            total_set = self._shuffle_dataset()
+        else:
+            total_set = self._total_dataset
 
-        test_set = total_shuffle[-dev_test_size:]
-        dev_set = total_shuffle[-(2 * dev_test_size): -dev_test_size]
-        train_set = total_shuffle[: -(2 * dev_test_size)]
+        test_set = total_set[-dev_test_size:]
+        dev_set = total_set[-(2 * dev_test_size): -dev_test_size]
+        train_set = total_set[: -(2 * dev_test_size)]
 
         return train_set, dev_set, test_set
 
@@ -76,17 +81,25 @@ class Couplets_data_generator:
     def load_sample(self, size=100):
         assert size < len(self._total_couplets)
 
-        total_shuffle = self._shuffle_dataset()
-        sample = total_shuffle[:size]
+        total_set = self._shuffle_dataset()
+        sample = total_set[:size]
 
         return sample
 
 
     def _shuffle_dataset(self):
-        return self._total_couplets[np.random.permutation(len(self._total_couplets))]
+        return self._total_dataset[np.random.permutation(len(self._total_dataset))]
 
 
+# TEST
 if __name__ == '__main__':
+    print('start')
     generator = Couplets_data_generator('./datasets/all_couplets.txt')
-    print(generator._total_dataset.shape)
+    print()
+    print(generator._shuffle_dataset().shape)
+    train, dev, test = generator.load_datasets(dev_test_size=20)
+    print(train.shape)
+    print(dev.shape)
+    print(test.shape)
+
 
