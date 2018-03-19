@@ -96,9 +96,8 @@ class Couplets_data_generator:
 if __name__ == '__main__':
     print('start')
     generator = Couplets_data_generator('./datasets/all_couplets.txt')
-    print()
-    print(generator._shuffle_dataset().shape)
-    train, dev, test = generator.load_datasets(dev_test_size=20, shuffle=True)
+    print(generator._total_dataset.shape)
+    train, dev, test = generator.load_datasets(dev_test_size=4000, shuffle=True)
     print(train.shape)
     print(dev.shape)
     print(test.shape)
