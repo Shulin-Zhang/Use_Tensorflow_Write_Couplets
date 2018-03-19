@@ -70,6 +70,7 @@ def _create_X_Y(data_set):
     return X, Y
 
 
+# TEST
 if __name__ == '__main__':
     result = load_sample_datasets()
     sample_X = result['sample_X']
