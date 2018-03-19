@@ -1,3 +1,4 @@
+# encoding:utf-8
 # zhangshulin
 # 2018-3-17
 # e-mail: zhangslwork@yeah.net
@@ -9,14 +10,14 @@ from collections import Counter
 
 class Couplets_data_generator:
 
-    def __init__(self, file_path, vocabs_size=1000, max_len=20):
+    def __init__(self, file_path, vocabs_size=5000, max_len=30):
         self._vocabs_size = vocabs_size
         self._max_len = max_len
 
         with open(file_path, encoding='utf8') as f:
             self._total_couplets = f.readlines()
-            self._total_couplets = [couplet for couplet in self._total_couplets
-                                     if len(couplet.strip()) != 0]
+        
+        self._clean_couplets()
 
         self._word2Index, self._index2word = self._create_words_dict()
         self._total_dataset = self._create_dataset()
@@ -50,6 +51,19 @@ class Couplets_data_generator:
         return sample    
 
 
+    def _clean_couplets(self):
+        result = []
+
+        for line in self._total_couplets:
+            line_strip = line.strip()
+            length = len(line_strip)
+
+            if length != 0 and length <= self._max_len:
+                result.append(line_strip)
+
+        self._total_couplets = result 
+
+
     def _create_words_dict(self):
         word_counter = Counter()
 
@@ -60,8 +74,8 @@ class Couplets_data_generator:
         max_len = len(word_counter)
 
         words_arr = sorted(word_counter, reverse=True, key=word_counter.get)
-        words_arr = words_arr[:min(self._vocabs_size, max_len)]
-        words_arr[-1] = 'UNK'
+        words_arr = words_arr[:min(self._vocabs_size - 2, max_len - 2)]
+        words_arr = [' ', 'UNK'] + words_arr
 
         word2Index = {}
         index2word = {}
