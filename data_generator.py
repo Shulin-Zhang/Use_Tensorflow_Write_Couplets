@@ -2,8 +2,6 @@
 # 2018-3-17
 # e-mail: zhangslwork@yeah.net
 
-# ！！这个数据集生成器一次处理所有数据，会发生内存占用超出机器内存的问题，所以不适合处理大数据集
-
 
 import numpy as np 
 from collections import Counter
@@ -21,7 +19,35 @@ class Couplets_data_generator:
                                      if len(couplet.strip()) != 0]
 
         self._word2Index, self._index2word = self._create_words_dict()
-        self._total_dataset = self._create_one_hot_dataset()
+        self._total_dataset = self._create_dataset()
+
+
+    def get_words_dict(self):
+        return self._word2Index, self._index2word
+
+
+    def load_datasets(self, dev_test_size=4000, shuffle=False):
+        assert dev_test_size * 2 < len(self._total_dataset)
+
+        if shuffle:
+            total_set = self._shuffle_dataset()
+        else:
+            total_set = self._total_dataset
+
+        test_set = total_set[-dev_test_size:]
+        dev_set = total_set[-(2 * dev_test_size): -dev_test_size]
+        train_set = total_set[: -(2 * dev_test_size)]
+
+        return train_set, dev_set, test_set
+
+
+    def load_sample(self, size=100):
+        assert size < len(self._total_couplets)
+
+        total_set = self._shuffle_dataset()
+        sample = total_set[:size]
+
+        return sample    
 
 
     def _create_words_dict(self):
@@ -47,44 +73,19 @@ class Couplets_data_generator:
         return word2Index, index2word
 
 
-    def _create_one_hot_dataset(self):
+    def _create_dataset(self):
         m = len(self._total_couplets)
         max_len = min(len(max(self._total_couplets, key=len)), self._max_len)
-        total_dataset = np.zeros((m, max_len, self._vocabs_size))
+        total_dataset = np.zeros((m, max_len))
 
         for line in range(m):
             for pos, word in enumerate(self._total_couplets[line]):
                 index = self._word2Index.get(word, len(self._word2Index) - 1)
-                index = min(index, self._vocabs_size - 1)
 
                 if pos < self._max_len:
-                    total_dataset[line, pos, index] = 1
+                    total_dataset[line, pos] =  index
 
         return total_dataset
-
-
-    def load_datasets(self, dev_test_size=4000, shuffle=False):
-        assert dev_test_size * 2 < len(self._total_dataset)
-
-        if shuffle:
-            total_set = self._shuffle_dataset()
-        else:
-            total_set = self._total_dataset
-
-        test_set = total_set[-dev_test_size:]
-        dev_set = total_set[-(2 * dev_test_size): -dev_test_size]
-        train_set = total_set[: -(2 * dev_test_size)]
-
-        return train_set, dev_set, test_set
-
-
-    def load_sample(self, size=100):
-        assert size < len(self._total_couplets)
-
-        total_set = self._shuffle_dataset()
-        sample = total_set[:size]
-
-        return sample
 
 
     def _shuffle_dataset(self):
@@ -97,7 +98,7 @@ if __name__ == '__main__':
     generator = Couplets_data_generator('./datasets/all_couplets.txt')
     print()
     print(generator._shuffle_dataset().shape)
-    train, dev, test = generator.load_datasets(dev_test_size=20)
+    train, dev, test = generator.load_datasets(dev_test_size=20, shuffle=True)
     print(train.shape)
     print(dev.shape)
     print(test.shape)
