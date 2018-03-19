@@ -62,15 +62,28 @@ class Couplets_data_generator:
 
 
     def load_datasets(self, dev_test_size=4000):
-        pass
+        assert dev_test_size * 2 < len(self._total_couplets)
+
+        total_shuffle = self._shuffle_dataset()
+
+        test_set = total_shuffle[-dev_test_size:]
+        dev_set = total_shuffle[-(2 * dev_test_size): -dev_test_size]
+        train_set = total_shuffle[: -(2 * dev_test_size)]
+
+        return train_set, dev_set, test_set
 
 
-    def load_simple(self, size=100):
-        pass
+    def load_sample(self, size=100):
+        assert size < len(self._total_couplets)
+
+        total_shuffle = self._shuffle_dataset()
+        sample = total_shuffle[:size]
+
+        return sample
 
 
-    def _divide_data(self):
-        pass
+    def _shuffle_dataset(self):
+        return self._total_couplets[np.random.permutation(len(self._total_couplets))]
 
 
 if __name__ == '__main__':
