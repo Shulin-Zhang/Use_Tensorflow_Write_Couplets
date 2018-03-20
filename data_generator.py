@@ -1,4 +1,3 @@
-# encoding:utf-8
 # zhangshulin
 # 2018-3-17
 # e-mail: zhangslwork@yeah.net
