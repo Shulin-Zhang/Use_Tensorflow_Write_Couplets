@@ -31,10 +31,10 @@ def load_datasets(vocabs_size=5000, max_len=30, dev_test_size=4000, batch_size=3
     }
 
 
-def load_sample_datasets(vocabs_size=5000, max_len=30, batch_size=16):
+def load_sample_datasets(vocabs_size=5000, max_len=30, batch_size=16, sample_size=100):
     generator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
 
-    sample_set = generator.load_sample()
+    sample_set = generator.load_sample(size=sample_size)
     sample_generator = Batch_generator(sample_set, batch_size, vocabs_size)
 
     word2index, index2word = generator.get_words_dict()
