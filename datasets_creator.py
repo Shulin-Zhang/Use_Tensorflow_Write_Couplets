@@ -7,7 +7,7 @@ import numpy as np
 from collections import Counter
 
 
-class Couplets_data_generator:
+class Datasets_creator:
 
     def __init__(self, file_path, vocabs_size=5000, max_len=30):
         self._vocabs_size = vocabs_size
@@ -108,7 +108,7 @@ class Couplets_data_generator:
 # TEST
 if __name__ == '__main__':
     print('start')
-    generator = Couplets_data_generator('./datasets/all_couplets.txt')
+    generator = Datasets_creator('./datasets/all_couplets.txt')
     print(generator._total_dataset.shape)
     train, dev, test = generator.load_datasets(dev_test_size=4000, shuffle=True)
     print(train.shape)
