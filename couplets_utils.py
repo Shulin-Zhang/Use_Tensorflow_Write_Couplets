@@ -60,7 +60,7 @@ def convert_sequence_to_text(sequence, index2word):
 
 def _create_X_Y(data_set):
     m = data_set.shape[0]
-    zeros_start = np.zeros((m, 1))
+    zeros_start = np.zeros((m, 1), dtype=np.int32)
     
     X = np.concatenate([zeros_start, data_set], axis=1)
     X = X[:, :-1]
