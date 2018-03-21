@@ -48,6 +48,16 @@ def load_sample_datasets(vocabs_size=5000, max_len=30, batch_size=16, sample_siz
     }
 
 
+def load_words_dict(vocabs_size=5000, max_len=30, n_a=16):
+    generator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
+    word2index, index2word = generator.get_words_dict()
+
+    return {
+        'word2index': word2index,
+        'index2word': index2word
+    }
+
+
 def convert_predict_to_text(predict, index2word):
     sequence = np.argmax(predict, axis=-1)
     predict[sequence == 1] = 0

@@ -6,7 +6,6 @@
 from keras.layers import LSTM, Dense, Lambda, Reshape, Input
 from keras.models import Model
 from keras import backend as K
-import numpy as np
 import tensorflow as tf
 
 
