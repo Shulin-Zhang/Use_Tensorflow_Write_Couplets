@@ -14,11 +14,10 @@ from model import create_infer_model
 from couplets_utils import convert_text_to_onehot, convert_predict_to_text, load_words_dict
 import sys
 import numpy as np
+import argparse
 
 
-word2index, index2word = load_words_dict(VOCABS_SIZE, MAX_LEN, LSTM_NA)
-
-def write_couplets(begin_text, infer_model):
+def write_couplets(begin_text, infer_model, word2index, index2word):
     x = convert_text_to_onehot(begin_text, VOCABS_SIZE, MAX_LEN, word2index)
     a0 = np.zeros((1, LSTM_NA))
     c0 = np.zeros((1, LSTM_NA))
@@ -29,16 +28,21 @@ def write_couplets(begin_text, infer_model):
     return result_text
 
 
-infer_model = create_infer_model(VOCABS_SIZE, LSTM_NA, MAX_LEN)
-infer_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-infer_model.load_weights(WEIGHTS)
+def infer(begin_text):
+    word2index, index2word = load_words_dict(VOCABS_SIZE, MAX_LEN, LSTM_NA)
+
+    infer_model = create_infer_model(VOCABS_SIZE, LSTM_NA, MAX_LEN)
+    infer_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    infer_model.load_weights(WEIGHTS)
+
+    result_text = write_couplets(begin_text, infer_model, word2index, index2word)
+
+    print(result_text)
 
 
-if len(sys.argv) >= 2:
-    begin_text = str(sys.argv[1])
-else:
-    begin_text = ''
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('text', type=str, default='', help='请输入对联的开始文本')
+    args = parser.parse_args()
+    infer(args.text)
 
-result_text = write_couplets(begin_text, infer_model)
-
-print(result_text)

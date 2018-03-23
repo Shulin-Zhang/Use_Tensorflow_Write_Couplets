@@ -11,14 +11,14 @@ import numpy as np
 
 
 def load_datasets(vocabs_size=5000, max_len=30, dev_test_size=4000, batch_size=32, n_a=16):
-    generator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
+    creator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
 
-    train_set, dev_set, test_set = generator.load_datasets(dev_test_size=dev_test_size)
+    train_set, dev_set, test_set = creator.load_datasets(dev_test_size=dev_test_size)
     train_generator = Batch_generator(train_set, batch_size, vocabs_size, n_a)
     dev_generator = Batch_generator(dev_set, batch_size, vocabs_size, n_a)
     test_generator = Batch_generator(test_set, batch_size, vocabs_size, n_a)
 
-    word2index, index2word = generator.get_words_dict()
+    word2index, index2word = creator.get_words_dict()
 
     return {
         'train_gen': train_generator,
@@ -32,12 +32,12 @@ def load_datasets(vocabs_size=5000, max_len=30, dev_test_size=4000, batch_size=3
 
 
 def load_sample_datasets(vocabs_size=5000, max_len=30, batch_size=16, sample_size=100, n_a=16):
-    generator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
+    creator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
 
-    sample_set = generator.load_sample(size=sample_size)
+    sample_set = creator.load_sample(size=sample_size)
     sample_generator = Batch_generator(sample_set, batch_size, vocabs_size, n_a)
 
-    word2index, index2word = generator.get_words_dict()
+    word2index, index2word = creator.get_words_dict()
 
     return {
         'sample_gen': sample_generator,
@@ -49,13 +49,10 @@ def load_sample_datasets(vocabs_size=5000, max_len=30, batch_size=16, sample_siz
 
 
 def load_words_dict(vocabs_size=5000, max_len=30, n_a=16):
-    generator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
-    word2index, index2word = generator.get_words_dict()
+    creator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
+    word2index, index2word = creator.get_words_dict()
 
-    return {
-        'word2index': word2index,
-        'index2word': index2word
-    }
+    return word2index, index2word
 
 
 def convert_predict_to_text(predict, index2word):
@@ -83,8 +80,8 @@ def convert_text_to_onehot(text, vocabs_size, max_len, word2index):
 
 # TEST
 if __name__ == '__main__':
-    result = load_sample_datasets()
-    generator = result['sample_gen']
+    result = load_datasets()
+    generator = result['dev_gen']
     word2index = result['word2index']
 
     num = 0
