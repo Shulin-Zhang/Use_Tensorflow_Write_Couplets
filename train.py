@@ -49,7 +49,13 @@ def train(epochs=1, learning_rate=0.01, batch_size=64, resume=True, sample=False
     if mode == 'train':
         logging.info('begin training')
         model.fit_generator(generator, epochs=epochs)
+
         model.save_weights(WEIGHTS)
+
+        evaluation = model.evaluate_generator(generator)
+        accuracy = sum(evaluation[-VOCABS_SIZE:]) / VOCABS_SIZE 
+        print('total loss: {}, average accuray: {}'.format(evaluation[0], accuracy))
+
         logging.info('training end')
     elif mode == 'evaluate':
         logging.info('begin evaluate')

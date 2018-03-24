@@ -103,3 +103,4 @@ ENV/
 ###
 datasets
 .vscode
+weights.h5
