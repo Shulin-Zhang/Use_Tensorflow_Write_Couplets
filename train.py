@@ -41,9 +41,8 @@ def train(epochs=1, learning_rate=0.01, batch_size=64, resume=True, sample=False
     model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
     logging.info('model creating complete')
 
-    logging.info('begin load weights')
-
     if os.path.exists(WEIGHTS) and resume:
+        logging.info('begin load weight')
         model.load_weights(WEIGHTS)
         logging.info('weight load complete')
 
@@ -73,10 +72,10 @@ if __name__ == '__main__':
     parser.add_argument('--lr', default=0.01, type=float, help='learning rate')
     parser.add_argument('--batch', default=64, type=int, help='mini batch size')
     parser.add_argument('--epochs', default=1, type=int, help='epochs')
-    parser.add_argument('--resume', default=True, type=bool)
-    parser.add_argument('--sample', default=False, type=bool)
-    parser.add_argument('--evaluate', default=False, type=bool)
-    parser.add_argument('--test', default=False, type=bool)
+    parser.add_argument('--no_resume', default=True, action='store_false', dest='resume')
+    parser.add_argument('--sample', default=False, action='store_true')
+    parser.add_argument('--evaluate', default=False, action='store_true')
+    parser.add_argument('--test', default=False, action='store_true')
     
     args = parser.parse_args()
     

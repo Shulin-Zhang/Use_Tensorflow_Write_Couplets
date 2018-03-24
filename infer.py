@@ -19,10 +19,12 @@ import argparse
 
 def write_couplets(begin_text, infer_model, word2index, index2word):
     x = convert_text_to_onehot(begin_text, VOCABS_SIZE, MAX_LEN, word2index)
-    a0 = np.zeros((1, LSTM_NA))
-    c0 = np.zeros((1, LSTM_NA))
+    a_0 = np.zeros((1, LSTM_NA))
+    c_0 = np.zeros((1, LSTM_NA))
+    a_1 = np.zeros((1, LSTM_NA))
+    c_1 = np.zeros((1, LSTM_NA))
     
-    result = infer_model.predict([x, a0, c0])
+    result = infer_model.predict([x, a_0, c_0, a_1, c_1])
     result_text = convert_predict_to_text(np.array(result), index2word)
     
     return result_text
@@ -42,7 +44,7 @@ def infer(begin_text):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('text', type=str, default='', help='请输入对联的开始文本')
+    parser.add_argument('--text', type=str, default='', help='请输入对联的开始文本')
     args = parser.parse_args()
     infer(args.text)
 

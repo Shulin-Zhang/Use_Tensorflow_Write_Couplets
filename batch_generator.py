@@ -33,9 +33,9 @@ class Batch_generator(Sequence):
             batch = (self._X[batch_index * self._batch_size: (1 + batch_index) * self._batch_size], 
                      self._Y[batch_index * self._batch_size: (1 + batch_index) * self._batch_size]) 
 
-        a0 = c0 = np.zeros((len(batch[0]), self._n_a))
+        a_0_0 = c_0_0 = a_1_0 = c_1_0 = np.zeros((len(batch[0]), self._n_a))
 
-        return ([self._create_onehot(batch[0]), a0, c0],
+        return ([self._create_onehot(batch[0]), a_0_0, c_0_0, a_1_0, c_1_0],
                list(np.transpose(self._create_onehot(batch[1]), [1, 0, 2])))
 
 
