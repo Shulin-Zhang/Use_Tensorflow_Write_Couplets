@@ -19,7 +19,7 @@ import logging
 import argparse
 
 
-def train(epochs=1, learning_rate=0.01, batch_size=64, resume=True, sample=False, mode='train'):
+def train(epochs=1, learning_rate=0.01, batch_size=64, keep_prob=1, resume=True, sample=False, mode='train'):
     logging.info('loading datasets')
 
     if sample:
@@ -35,7 +35,7 @@ def train(epochs=1, learning_rate=0.01, batch_size=64, resume=True, sample=False
             generator = datasets['test_gen']
 
     logging.info('begin creating model.')
-    model = create_train_model(VOCABS_SIZE, LSTM_NA, MAX_LEN)
+    model = create_train_model(VOCABS_SIZE, LSTM_NA, MAX_LEN, keep_prob)
 
     adam = Adam(lr=learning_rate)
     model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
@@ -78,6 +78,7 @@ if __name__ == '__main__':
     parser.add_argument('--lr', default=0.01, type=float, help='learning rate')
     parser.add_argument('--batch', default=64, type=int, help='mini batch size')
     parser.add_argument('--epochs', default=1, type=int, help='epochs')
+    parser.add_argument('--keep_prob', default=1, type=float)
     parser.add_argument('--no_resume', default=True, action='store_false', dest='resume')
     parser.add_argument('--sample', default=False, action='store_true')
     parser.add_argument('--evaluate', default=False, action='store_true')
@@ -96,6 +97,7 @@ if __name__ == '__main__':
         epochs=args.epochs, 
         learning_rate=args.lr, 
         batch_size=args.batch, 
+        keep_prob=args.keep_prob,
         resume=args.resume, 
         sample=args.sample,
         mode=mode
