@@ -51,12 +51,7 @@ def train(epochs=1, learning_rate=0.01, batch_size=64, keep_prob=1, resume=True,
         model.fit_generator(generator, epochs=epochs)
         logging.info('begin weight')
         model.save_weights(WEIGHTS)
-        logging.info('end save weight')
-        logging.info('begin evaluate')
-        evaluation = model.evaluate_generator(generator)
-        accuracy = sum(evaluation[-VOCABS_SIZE:]) / VOCABS_SIZE 
-        print('total loss: {}, average accuray: {}'.format(evaluation[0], accuracy))
-        logging.info('end evaluate')
+        logging.info('end saving weight')
         logging.info('training end')
     elif mode == 'evaluate':
         logging.info('begin evaluate')
