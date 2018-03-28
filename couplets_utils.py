@@ -78,6 +78,13 @@ def convert_text_to_onehot(text, vocabs_size, max_len, word2index):
     return onehot
 
 
+def convert_onehots_to_text(onehots, index2word):
+    sequences = np.argmax(onehots, axis=-1).T
+    texts = [convert_sequence_to_text(seq, index2word) for seq in sequences]
+
+    return texts
+
+
 # TEST
 if __name__ == '__main__':
     result = load_datasets()

@@ -96,3 +96,40 @@ def create_infer_model(n_x, n_a, Tx):
     
     return model
 
+
+def create_random_infer_model(n_x, n_a, Tx):
+    input = Input(shape=(n_x,), name='x_0')
+    a_0_0 = Input(shape=(n_a,), name='a_0_0')
+    c_0_0 = Input(shape=(n_a,), name='c_0_0')
+    a_1_0 = Input(shape=(n_a,), name='a_1_0')
+    c_1_0 = Input(shape=(n_a,), name='c_1_0')
+    
+    x = input
+    a_0 = a_0_0
+    c_0 = c_0_0
+    a_1 = a_1_0
+    c_1 = c_1_0
+
+    lstm_cell_0 = LSTM(units=n_a, return_state=True, name='lstm_0')
+    lstm_cell_1 = LSTM(units=n_a, return_state=True, name='lstm_1')
+    dense_layer_2 = Dense(units=n_x, activation='softmax', name='softmax_2')
+    
+    def sample(x):
+        return  tf.one_hot(tf.multinomial(x, 1), n_x, axis=-1)
+    
+    outputs = []
+    
+    for _ in range(Tx):              
+        x = Reshape(target_shape=(1, -1))(x)
+        a_0, x, c_0 = lstm_cell_0(x, initial_state=[a_0, c_0])
+        x = Reshape(target_shape=(1, -1))(x)
+        a_1, x, c_1 = lstm_cell_1(x, initial_state=[a_1, c_1])
+        x = dense_layer_2(x)
+        x = Lambda(sample)(x)
+        x = Reshape((-1,))(x)
+        outputs.append(x)
+        
+    model = Model(inputs=[input, a_0_0, c_0_0, a_1_0, c_1_0], outputs=outputs)
+    
+    return model
+
