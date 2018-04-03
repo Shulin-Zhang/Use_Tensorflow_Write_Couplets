@@ -8,7 +8,7 @@
 
 下载后解压到项目目录下即可
 
-用keras训练后的权重下载地址：[百度云盘](https://pan.baidu.com/s/1LM3yIf0yFTH4xShfSDbZnA)
+用keras训练后的权重下载地址：[百度云盘](https://pan.baidu.com/s/1W-kGx3chSoW7iccHx7R8QA)
 
 下载后放到项目目录下即可
 
