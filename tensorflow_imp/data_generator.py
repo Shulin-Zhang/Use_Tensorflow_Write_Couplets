@@ -45,7 +45,7 @@ def test():
     _, _, _, _, _, test_set = helper.process_dataset()
     data_g = CoupletsDataGenerator(test_set)
     sess = tf.Session()
-    batch_g = data_g.get_batch(sess, 2)
+    batch_g = data_g.get_batch(sess, 2, 1)
 
     next_data = next(batch_g)
 
