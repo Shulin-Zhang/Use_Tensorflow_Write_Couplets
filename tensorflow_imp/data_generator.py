@@ -19,8 +19,9 @@ class CoupletsDataGenerator:
             self._data = self._data.shuffle(buffer_size=buffer_size)
 
 
-    def get_batch(self, session, batch_size):
+    def get_batch(self, session, batch_size, epochs):
         self._data = self._data.batch(batch_size)
+        self._data = self._data.repeat(epochs)
         
         iterator = self._data.make_one_shot_iterator()
         next = iterator.get_next()
