@@ -20,10 +20,10 @@ class CoupletsDataGenerator:
 
 
     def get_batch(self, session, batch_size, epochs):
-        self._data = self._data.batch(batch_size)
-        self._data = self._data.repeat(epochs)
+        batch_data = self._data.batch(batch_size)
+        repeat_data = batch_data.repeat(epochs)
         
-        iterator = self._data.make_one_shot_iterator()
+        iterator = repeat_data.make_one_shot_iterator()
         next = iterator.get_next()
 
         while True:
@@ -42,17 +42,14 @@ class CoupletsDataGenerator:
 def test():
     import helper 
 
-    _, _, _, _, _, test_set = helper.process_dataset()
-    data_g = CoupletsDataGenerator(test_set)
+    _, _, _, train_set, _, test_set = helper.process_dataset()
+    data_g = CoupletsDataGenerator(train_set)
     sess = tf.Session()
-    batch_g = data_g.get_batch(sess, 2, 1)
+    batch_g = data_g.get_batch(sess, 128, 1)
 
-    next_data = next(batch_g)
-
-    print('X shape:', next_data[0].shape)
-    print('Y shape:', next_data[1].shape)
-    print(next_data[0][1, :5])
-    print(next_data[1][1, :5])
+    for X, Y in batch_g:
+        print('X: ', X.shape)
+        print('Y: ', Y.shape)
 
 
 if __name__ == '__main__':
