@@ -34,12 +34,12 @@ def cut_dataset(input_path=DATA_PATH, output_path=CUT_PATH):
     output_file.close()
 
 
-def create_vocab(input_path=CUT_PATH):
+def create_vocab(vocab_size, input_path=CUT_PATH):
     with open(input_path, encoding='utf-8') as f:
         text = f.read()
 
     words_counter = Counter(text.split())
-    words_sorted = [' '] + sorted(words_counter, key=words_counter.get, reverse=True)
+    words_sorted = [' ', 'UNK'] + sorted(words_counter, key=words_counter.get, reverse=True)[:vocab_size - 2]
 
     index2word = dict(enumerate(words_sorted))
     word2index = {word: index for index, word in index2word.items()}
@@ -71,12 +71,12 @@ def divide_dataset(all_path=CUT_PATH, train_path=TRAIN_PATH, dev_path=DEV_PATH, 
 
 def convert_text_line_to_ints(text_line, word2index):
     words_list = text_line.split()
-    int_list = [word2index[word] for word in words_list]
+    int_list = [word2index.get(word, 1) for word in words_list]
 
     return int_list
 
 
-def convert_data_file(file_path, word2index):
+def convert_data_file(file_path, word2index, vocab_size):
     with open(file_path, 'r', encoding='utf-8') as f:
         text_lines_list = f.readlines()
     
@@ -90,15 +90,17 @@ def convert_data_file(file_path, word2index):
     padding_array = np.zeros((len(int_lines_list), max_length), dtype=np.int32)
     for index, int_line in enumerate(int_lines_list):
         padding_array[index, :len(int_line)] = int_line
+
+    padding_array[padding_array >= vocab_size] = word2index['UNK']
     
     return padding_array
 
 
-def process_dataset(all_couplets=DATA_PATH):
+def process_dataset(vocab_size=100000, all_couplets=DATA_PATH):
     if not os.path.exists(CUT_PATH):
         cut_dataset()
 
-    vocab_size, index2word, word2index = create_vocab()
+    vocab_size, index2word, word2index = create_vocab(vocab_size)
 
     if os.path.exists(TRAIN_SET) and os.path.exists(DEV_SET) and os.path.exists(TEST_SET):
         train_set = np.load(TRAIN_SET)
@@ -115,9 +117,9 @@ def process_dataset(all_couplets=DATA_PATH):
     if (not os.path.exists(TRAIN_PATH)) or (not os.path.exists(DEV_PATH)) or (not os.path.exists(TEST_PATH)):
         divide_dataset()
     
-    train_set = convert_data_file(TRAIN_PATH, word2index)
-    dev_set = convert_data_file(DEV_PATH, word2index)
-    test_set = convert_data_file(TEST_PATH, word2index)
+    train_set = convert_data_file(TRAIN_PATH, word2index, vocab_size)
+    dev_set = convert_data_file(DEV_PATH, word2index, vocab_size)
+    test_set = convert_data_file(TEST_PATH, word2index, vocab_size)
 
     np.save(TRAIN_SET, train_set)
     np.save(DEV_SET, dev_set)
