@@ -29,6 +29,10 @@ class CoupletsDataGenerator:
         while True:
             try:
                 data_set = session.run(next)
+
+                if len(data_set) != batch_size:
+                    continue 
+                    
                 Y = data_set
                 fore_zeros = np.zeros((data_set.shape[0], 1), dtype=np.int32)
                 X = np.concatenate((fore_zeros, Y[:, : -1]), axis=1)
@@ -42,14 +46,17 @@ class CoupletsDataGenerator:
 def test():
     import helper 
 
-    _, _, _, train_set, _, test_set = helper.process_dataset()
-    data_g = CoupletsDataGenerator(train_set)
+    _, _, _, _, _, test_set = helper.process_dataset()
+    data_g = CoupletsDataGenerator(test_set)
     sess = tf.Session()
     batch_g = data_g.get_batch(sess, 128, 1)
 
+    step = 0
     for X, Y in batch_g:
+        print('step: ', step)
         print('X: ', X.shape)
         print('Y: ', Y.shape)
+        step += 1
 
 
 if __name__ == '__main__':
