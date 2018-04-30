@@ -29,10 +29,6 @@ class CoupletsDataGenerator:
         while True:
             try:
                 data_set = session.run(next)
-
-                if len(data_set) != batch_size:
-                    continue 
-                    
                 Y = data_set
                 fore_zeros = np.zeros((data_set.shape[0], 1), dtype=np.int32)
                 X = np.concatenate((fore_zeros, Y[:, : -1]), axis=1)
