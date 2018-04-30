@@ -12,6 +12,7 @@ class Batch_generator:
 
     def __init__(self, set_array, shuffle=True, buffer_size=10000):
         self._data = tf.data.Dataset.from_tensor_slices(set_array)
+        self.shape = set_array.shape
         
         if shuffle:
             self._data = self._data.shuffle(buffer_size=buffer_size)
