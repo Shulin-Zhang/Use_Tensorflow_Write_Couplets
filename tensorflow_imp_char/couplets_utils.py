@@ -11,8 +11,8 @@ from batch_generator import Batch_generator
 import numpy as np
 
 
-def load_datasets(vocabs_size=5000, max_len=30, dev_test_size=4000):
-    creator = Datasets_creator(FILF_PATH, vocabs_size, max_len)
+def load_datasets(max_vocabs_size=5000, max_len=30, dev_test_size=4000):
+    creator = Datasets_creator(FILF_PATH, max_vocabs_size, max_len)
 
     train_set, dev_set, test_set = creator.load_datasets(dev_test_size=dev_test_size)
     train_generator = Batch_generator(train_set)
@@ -27,7 +27,7 @@ def load_datasets(vocabs_size=5000, max_len=30, dev_test_size=4000):
         'test_gen': test_generator,
         'char2index': char2index,
         'index2char': index2char,
-        'vocabs_size': vocabs_size,
+        'vocabs_size': len(char2index),
         'max_len': max_len 
     }
 
