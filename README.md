@@ -32,6 +32,12 @@ tensorflow_imp_char 目录下。
 
 权重2下载 [百度云盘](https://pan.baidu.com/s/1I2K2LNpLIywFdgD6wajzcA)
 
+权重的参数：
+lstm_units = 256
+lstm_layers = 2
+max_len = 30
+vocabs_size = 10000
+
 ### 挑出来的一些作品：
 
 中国梦，万户兴隆兴国运；和谐社，千家福业展宏图。
