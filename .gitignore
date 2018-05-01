@@ -105,4 +105,6 @@ datasets
 .vscode
 weights.h5
 model_save
+tensorflow_imp_char/model_save
+
 
