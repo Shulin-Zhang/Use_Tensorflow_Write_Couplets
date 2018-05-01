@@ -20,10 +20,6 @@ tensorflow_imp_vcab 目录下。
 
 这个网络嵌入层和lstm一起训练，所以很难训练，最后放弃了。也许用预训练的嵌入层效果会好一些。
 
-权重1下载 [百度云盘](https://pan.baidu.com/s/1oqVADtmw2G48_PK3L0fAEw)
-
-权重2下载 [百度云盘](https://pan.baidu.com/s/1I2K2LNpLIywFdgD6wajzcA)
-
 # Tensorflow实现基于字符的语言模型
 
 tensorflow_imp_char 目录下。
@@ -31,6 +27,10 @@ tensorflow_imp_char 目录下。
 没有词嵌入层，直接是两层LSTM，最后是softmax分类器。
 
 在阿里云p100竞价实例上训练，这个网络最后的效果还是不错的。
+
+权重1下载 [百度云盘](https://pan.baidu.com/s/1oqVADtmw2G48_PK3L0fAEw)
+
+权重2下载 [百度云盘](https://pan.baidu.com/s/1I2K2LNpLIywFdgD6wajzcA)
 
 ### 挑出来的一些作品：
 
