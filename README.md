@@ -2,7 +2,7 @@
 
 在阿里云p100 gpu实例上训练了大约一小时，已经可以生成句子，效果不是很理想。
 
-发现keras实现NPL，代码确实很难写。
+发现keras实现NLP，代码确实很难写。
 
 数据集下载地址：[百度云盘](https://pan.baidu.com/s/1LM3yIf0yFTH4xShfSDbZnA)
 
